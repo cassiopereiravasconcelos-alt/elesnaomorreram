@@ -258,7 +258,7 @@
     </header>
 
     <!-- SECTION 1: HERO -->
-    <section class="relative w-full h-screen overflow-hidden bg-cinematic-black flex items-center justify-center">
+    <section class="relative w-full min-h-[100svh] overflow-hidden bg-cinematic-black flex items-center justify-center pt-24 pb-12 md:py-0">
 
         <!-- Video Background (Absolute within the section) -->
         <div class="absolute inset-0 z-0 bg-cinematic-black">
@@ -273,7 +273,7 @@
         <!-- Hero Content -->
         <div class="hero-content relative z-20 w-full px-6 md:px-16 lg:px-24">
             <div
-                class="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end pb-20 md:pb-0 pt-32">
+                class="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end pb-12 md:pb-0 pt-16 md:pt-32">
 
                 <!-- Left Content: Headline & CTA -->
                 <div class="w-full md:w-8/12 flex flex-col">
@@ -284,29 +284,29 @@
                             Viva</span>
                     </div>
 
-                    <h1 class="font-display text-[4rem] md:text-[6rem] lg:text-[7.5rem] font-bold tracking-tighter leading-[0.9] mb-8 text-ink-primary glow-text"
+                    <h1 class="font-display text-[3.5rem] md:text-[6rem] lg:text-[7.5rem] font-bold tracking-tighter leading-[0.9] mb-6 md:mb-8 text-ink-primary glow-text"
                         id="hero-title">
                         A voz<br>
                         <span class="text-outline-ink opacity-80">eterna</span> da<br>
                         literatura.
                     </h1>
 
-                    <p class="font-sans text-lg md:text-xl text-ink-secondary max-w-xl leading-relaxed font-light mb-12 opacity-0"
+                    <p class="font-sans text-lg md:text-xl text-ink-secondary max-w-xl leading-relaxed font-light mb-8 md:mb-12 opacity-0"
                         id="hero-desc">
                         Grandes autores estão presentes novamente. Agora você pode ouvir suas vozes, fazer perguntas e
                         atravessar a obra de dentro para fora.
                     </p>
 
-                    <div class="flex flex-wrap items-center gap-6 opacity-0" id="hero-ctas">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 w-full sm:w-auto opacity-0" id="hero-ctas">
                         <button id="btn-ouvir"
-                            class="btn-premium px-8 py-4 bg-wood-dark border border-wood-light text-ink-primary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center gap-3 hover:bg-wood-warm hover:border-accent-gold group">
+                            class="btn-premium px-8 py-4 bg-wood-dark border border-wood-light text-ink-primary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3 hover:bg-wood-warm hover:border-accent-gold group w-full sm:w-auto">
                             <span
                                 class="w-1.5 h-1.5 rounded-full bg-accent-red group-hover:bg-accent-redHover transition-colors"></span>
                             Antes de entender...
                         </button>
 
                         <button id="btn-trailer"
-                            class="btn-outline px-8 py-4 bg-transparent border border-wood-dark text-ink-secondary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center gap-3 hover:text-ink-primary cursor-pointer relative z-50">
+                            class="btn-outline px-8 py-4 bg-transparent border border-wood-dark text-ink-secondary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3 hover:text-ink-primary cursor-pointer relative z-50 w-full sm:w-auto">
                             <iconify-icon icon="solar:play-circle-linear" class="text-xl"></iconify-icon>
                             Trailer
                         </button>
@@ -325,13 +325,13 @@
                         <div class="flex items-center justify-end gap-2 text-ink-secondary text-sm font-light">
                             <iconify-icon icon="solar:record-circle-linear"
                                 class="text-accent-red animate-pulse"></iconify-icon>
-                            Transmissão Ativa
+                            A mente está disponível
                         </div>
                     </div>
 
                     <div class="flex flex-col items-center mt-12 gap-4">
-                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-secondary"
-                            style="writing-mode: vertical-rl; transform: rotate(180deg);">Scroll to explore</span>
+                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-secondary whitespace-nowrap"
+                            style="writing-mode: vertical-rl; transform: rotate(180deg);">Continue. O autor ainda não terminou de falar.</span>
                         <div class="scroll-indicator-line"></div>
                     </div>
                 </div>
@@ -339,6 +339,16 @@
             </div>
         </div>
     </section>
+
+    <!-- Trailer Modal -->
+    <div id="trailer-modal" class="fixed inset-0 z-[100] bg-cinematic-black/95 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500 p-4">
+        <button id="close-trailer" class="absolute top-6 right-6 md:top-8 md:right-8 text-ink-primary hover:text-accent-gold transition-colors z-[110] cursor-pointer bg-wood-dark/50 p-2 rounded-full border border-wood-light/30 flex items-center justify-center">
+            <iconify-icon icon="solar:close-circle-linear" class="text-3xl md:text-4xl"></iconify-icon>
+        </button>
+        <div class="relative w-full max-w-[90vw] max-h-[80vh] flex items-center justify-center shadow-2xl rounded-md bg-cinematic-black border border-wood-dark/50 overflow-hidden">
+            <video id="trailer-video" src="assets/raw_files/Hero Session.mp4" controls playsinline class="w-full h-full max-h-[80vh] object-contain outline-none"></video>
+        </div>
+    </div>
 
     <!-- SECTION 2: O MANIFESTO -->
     <section id="section-manifesto"
@@ -1205,47 +1215,33 @@
                 .to("#hero-details", { opacity: 1, x: 0, duration: 1.2 }, "-=0.8");
 
             // 3. Trailer Logic
-            const video = document.getElementById('hero-video');
             const btnTrailer = document.getElementById('btn-trailer');
+            const trailerModal = document.getElementById('trailer-modal');
+            const trailerVideo = document.getElementById('trailer-video');
+            const closeTrailer = document.getElementById('close-trailer');
 
-            if (btnTrailer && video) {
-                btnTrailer.addEventListener('click', () => {
-                    // Lock scrolling
+            if (btnTrailer && trailerModal && trailerVideo) {
+                const openModal = () => {
                     lenis.stop();
+                    trailerModal.classList.remove('pointer-events-none');
+                    gsap.to(trailerModal, { opacity: 1, duration: 0.5 });
+                    trailerVideo.currentTime = 0;
+                    trailerVideo.play();
+                };
 
-                    // Hide UI and overlays
-                    gsap.to(".hero-content, header", { opacity: 0, pointerEvents: "none", duration: 0.5 });
-                    gsap.to(".vignette, .bottom-gradient, .noise-overlay", { opacity: 0, duration: 0.5 });
-
-                    // Reset and play video with sound
-                    video.currentTime = 0;
-                    video.muted = false;
-                    video.loop = false;
-
-                    // Aumentar a opacidade do vídeo para 1 para modo tela cheia cinematográfico
-                    gsap.to(video, { opacity: 1, duration: 0.5 });
-
-                    video.play();
-                });
-
-
-                // When trailer finishes
-                video.addEventListener('ended', () => {
-                    // Restore background state (paused)
-                    video.muted = true;
-                    video.pause();
-
-                    // Restaurar opacidade do vídeo
-                    gsap.to(video, { opacity: 0.6, duration: 0.8 });
-
-                    // Unlock scrolling
+                const closeModal = () => {
                     lenis.start();
+                    trailerModal.classList.add('pointer-events-none');
+                    gsap.to(trailerModal, { opacity: 0, duration: 0.5 });
+                    trailerVideo.pause();
+                };
 
-                    // Show UI and overlays
-                    gsap.to(".hero-content, header", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out" });
-                    gsap.to(".vignette, .bottom-gradient", { opacity: 1, duration: 0.8 });
-                    gsap.to(".noise-overlay", { opacity: 0.03, duration: 0.8 });
+                btnTrailer.addEventListener('click', openModal);
+                closeTrailer.addEventListener('click', closeModal);
+                trailerModal.addEventListener('click', (e) => {
+                    if (e.target === trailerModal) closeModal();
                 });
+                trailerVideo.addEventListener('ended', closeModal);
             }
 
             // 4. Section 2 (Manifesto) Animations
