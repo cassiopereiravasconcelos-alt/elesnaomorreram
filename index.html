@@ -179,6 +179,22 @@
             /* Removes the black background of the video */
             mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
             -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-playing-trailer #hero-video-container {
+            z-index: 45;
+        }
+        .hero-playing-trailer #hero-video {
+            opacity: 1;
+            mix-blend-mode: normal;
+            mask-image: none;
+            -webkit-mask-image: none;
+        }
+        @media (max-width: 768px) {
+            .hero-playing-trailer #hero-video {
+                object-fit: contain;
+                background-color: #0B0B0C;
+            }
         }
 
         /* Overlays */
@@ -258,13 +274,18 @@
     </header>
 
     <!-- SECTION 1: HERO -->
-    <section class="relative w-full min-h-[100svh] overflow-hidden bg-cinematic-black flex items-center justify-center pt-24 pb-12 md:py-0">
+    <section id="hero-section" class="relative w-full min-h-[100svh] overflow-hidden bg-cinematic-black flex items-center justify-center pt-24 pb-12 md:py-0">
 
         <!-- Video Background (Absolute within the section) -->
-        <div class="absolute inset-0 z-0 bg-cinematic-black">
+        <div id="hero-video-container" class="absolute inset-0 z-0 bg-cinematic-black transition-all duration-700">
             <!-- Video starts paused. Plays only when Trailer is clicked. -->
             <video id="hero-video" src="assets/raw_files/Hero Session.mp4" playsinline muted preload="auto"></video>
         </div>
+
+        <!-- Close Trailer Button -->
+        <button id="close-hero-trailer" class="absolute top-6 right-6 md:top-8 md:right-8 text-ink-primary hover:text-accent-gold transition-colors z-[60] cursor-pointer bg-wood-dark/50 p-2 rounded-full border border-wood-light/30 flex items-center justify-center opacity-0 pointer-events-none">
+            <iconify-icon icon="solar:close-circle-linear" class="text-3xl md:text-4xl"></iconify-icon>
+        </button>
 
         <!-- Cinematic Overlays -->
         <div class="vignette absolute inset-0 z-0"></div>
@@ -340,15 +361,7 @@
         </div>
     </section>
 
-    <!-- Trailer Modal -->
-    <div id="trailer-modal" class="fixed inset-0 z-[100] bg-cinematic-black/95 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500 p-4">
-        <button id="close-trailer" class="absolute top-6 right-6 md:top-8 md:right-8 text-ink-primary hover:text-accent-gold transition-colors z-[110] cursor-pointer bg-wood-dark/50 p-2 rounded-full border border-wood-light/30 flex items-center justify-center">
-            <iconify-icon icon="solar:close-circle-linear" class="text-3xl md:text-4xl"></iconify-icon>
-        </button>
-        <div class="relative w-full max-w-[90vw] max-h-[80vh] flex items-center justify-center shadow-2xl rounded-md bg-cinematic-black border border-wood-dark/50 overflow-hidden">
-            <video id="trailer-video" src="assets/raw_files/Hero Session.mp4" controls playsinline class="w-full h-full max-h-[80vh] object-contain outline-none"></video>
-        </div>
-    </div>
+
 
     <!-- SECTION 2: O MANIFESTO -->
     <section id="section-manifesto"
@@ -1216,32 +1229,53 @@
 
             // 3. Trailer Logic
             const btnTrailer = document.getElementById('btn-trailer');
-            const trailerModal = document.getElementById('trailer-modal');
-            const trailerVideo = document.getElementById('trailer-video');
-            const closeTrailer = document.getElementById('close-trailer');
+            const heroVideo = document.getElementById('hero-video');
+            const heroSection = document.getElementById('hero-section');
+            const closeHeroTrailer = document.getElementById('close-hero-trailer');
 
-            if (btnTrailer && trailerModal && trailerVideo) {
-                const openModal = () => {
+            if (btnTrailer && heroVideo && heroSection && closeHeroTrailer) {
+                const openTrailer = () => {
                     lenis.stop();
-                    trailerModal.classList.remove('pointer-events-none');
-                    gsap.to(trailerModal, { opacity: 1, duration: 0.5 });
-                    trailerVideo.currentTime = 0;
-                    trailerVideo.play();
+                    
+                    // Change video state
+                    heroSection.classList.add('hero-playing-trailer');
+                    
+                    // Fade out UI
+                    gsap.to(".hero-content, header", { opacity: 0, pointerEvents: "none", duration: 0.5 });
+                    gsap.to(".vignette, .bottom-gradient, .noise-overlay", { opacity: 0, duration: 0.5 });
+                    
+                    // Fade in close button
+                    closeHeroTrailer.classList.remove('pointer-events-none');
+                    gsap.to(closeHeroTrailer, { opacity: 1, duration: 0.5, delay: 0.3 });
+                    
+                    heroVideo.currentTime = 0;
+                    heroVideo.muted = false;
+                    heroVideo.play();
                 };
 
-                const closeModal = () => {
+                const closeTrailer = () => {
                     lenis.start();
-                    trailerModal.classList.add('pointer-events-none');
-                    gsap.to(trailerModal, { opacity: 0, duration: 0.5 });
-                    trailerVideo.pause();
+                    
+                    // Restore video state
+                    heroSection.classList.remove('hero-playing-trailer');
+                    
+                    // Fade out close button
+                    closeHeroTrailer.classList.add('pointer-events-none');
+                    gsap.to(closeHeroTrailer, { opacity: 0, duration: 0.3 });
+                    
+                    // Fade in UI
+                    gsap.to(".hero-content, header", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out", delay: 0.2 });
+                    gsap.to(".vignette, .bottom-gradient", { opacity: 1, duration: 0.8, delay: 0.2 });
+                    gsap.to(".noise-overlay", { opacity: 0.03, duration: 0.8, delay: 0.2 });
+                    
+                    heroVideo.pause();
+                    heroVideo.muted = true;
+                    heroVideo.currentTime = 0;
                 };
 
-                btnTrailer.addEventListener('click', openModal);
-                closeTrailer.addEventListener('click', closeModal);
-                trailerModal.addEventListener('click', (e) => {
-                    if (e.target === trailerModal) closeModal();
-                });
-                trailerVideo.addEventListener('ended', closeModal);
+                btnTrailer.addEventListener('click', openTrailer);
+                closeHeroTrailer.addEventListener('click', closeTrailer);
+                heroVideo.addEventListener('ended', closeTrailer);
             }
 
             // 4. Section 2 (Manifesto) Animations
