@@ -1,0 +1,25 @@
+# Arquivos do Sistema Operacional (Mac / Windows)
+.DS_Store
+Thumbs.db
+
+# Pastas e arquivos de editores de código (como VS Code)
+.vscode/
+.idea/
+
+# Arquivos sensíveis
+.env
+.env.*
+
+# Logs
+*.log
+
+# Pastas de dependências (caso venha a usar no futuro)
+node_modules/
+
+# (Nota: A pasta 'raw_files' NÃO foi adicionada aqui de propósito, 
+# pois as imagens e vídeos dela são usados no index4.html)
+
+# Pastas pesadas / temporárias (não versionar)
+video_frames/
+scratch/
+templates/animations-gemini/assets/

@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Eles Não Morreram - Cinematic Hero</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- GSAP, ScrollTrigger, SplitType, Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        cinematic: {
+                            black: '#0B0B0C',
+                            dark: '#141414',
+                        },
+                        wood: {
+                            dark: '#2C241B',
+                            warm: '#3A2F25',
+                            light: '#5A4633',
+                        },
+                        ink: {
+                            primary: '#E8E6E3',
+                            secondary: '#CFCAC2',
+                        },
+                        accent: {
+                            red: '#8B1E1E',
+                            redHover: '#B03A2E',
+                            gold: '#C2A96A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0B0C;
+            color: #E8E6E3;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Lenis Setup */
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        /* Typography & Effects */
+        .text-outline-gold {
+            -webkit-text-stroke: 1px #C2A96A;
+            color: transparent;
+        }
+
+        .text-outline-ink {
+            -webkit-text-stroke: 1.5px #E8E6E3;
+            color: transparent;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 40px rgba(232, 230, 227, 0.15);
+        }
+
+        /* Split text animation prep */
+        .char {
+            transform: translateY(110%);
+            opacity: 0;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        /* Buttons */
+        .btn-premium {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(194, 169, 106, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-premium:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline {
+            transition: all 0.4s ease;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(44, 36, 27, 0.8);
+            border-color: #5A4633;
+        }
+
+        /* Scroll Progress Line */
+        .scroll-indicator-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, #C2A96A 0%, transparent 100%);
+            transform-origin: top;
+            animation: pulse-line 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes pulse-line {
+            0% {
+                transform: scaleY(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scaleY(0);
+                opacity: 0;
+                transform-origin: bottom;
+            }
+        }
+
+        /* Hero Video Background */
+        #hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            mix-blend-mode: lighten;
+            /* Removes the black background of the video */
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
+        }
+
+        /* Overlays */
+        .vignette {
+            background: radial-gradient(circle at center, transparent 30%, #0B0B0C 100%);
+            pointer-events: none;
+        }
+
+        .bottom-gradient {
+            background: linear-gradient(to top, #0B0B0C 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 50;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Reveal Animations for Section 2 */
+        .reveal-blur {
+            opacity: 0;
+            transform: translateY(40px);
+            filter: blur(10px);
+        }
+
+        .reveal-step {
+            opacity: 0;
+            transform: translateY(20px);
+            filter: blur(5px);
+        }
+
+        .reveal-image {
+            opacity: 0;
+            clip-path: inset(10% 10% 10% 10%);
+        }
+
+        .box-shadow-inner {
+            box-shadow: inset 0 0 100px rgba(11, 11, 12, 0.8);
+        }
+
+        /* Hide scrollbar for carousel */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-accent-red selection:text-ink-primary">
+
+    <div class="noise-overlay"></div>
+
+    <!-- Header (Fixed to the top of the viewport) -->
+    <header class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference">
+        <div class="font-display font-medium text-ink-primary tracking-[0.2em] uppercase text-xs">
+            @elesnaomorreram
+        </div>
+        <div class="flex items-center gap-2 cursor-pointer group">
+            <span
+                class="text-[10px] font-mono text-ink-secondary uppercase tracking-widest group-hover:text-ink-primary transition-colors">Menu</span>
+            <div
+                class="w-8 h-8 rounded-full border border-wood-light/50 flex items-center justify-center group-hover:border-accent-gold transition-colors">
+                <iconify-icon icon="solar:hamburger-menu-linear" class="text-ink-primary"></iconify-icon>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: HERO -->
+    <section class="relative w-full h-screen overflow-hidden bg-cinematic-black flex items-center justify-center">
+
+        <!-- Video Background (Absolute within the section) -->
+        <div class="absolute inset-0 z-0 bg-cinematic-black">
+            <!-- Video starts paused. Plays only when Trailer is clicked. -->
+            <video id="hero-video" src="raw_files/Hero Session.mp4" playsinline muted preload="auto"></video>
+        </div>
+
+        <!-- Cinematic Overlays -->
+        <div class="vignette absolute inset-0 z-0"></div>
+        <div class="bottom-gradient absolute bottom-0 left-0 w-full h-[40vh] z-0"></div>
+
+        <!-- Hero Content -->
+        <div class="hero-content relative z-20 w-full px-6 md:px-16 lg:px-24">
+            <div
+                class="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end pb-20 md:pb-0 pt-32">
+
+                <!-- Left Content: Headline & CTA -->
+                <div class="w-full md:w-8/12 flex flex-col">
+
+                    <div class="flex items-center gap-4 mb-8 opacity-0" id="intro-badge">
+                        <div class="h-px w-8 bg-accent-gold"></div>
+                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-accent-gold">A Biblioteca
+                            Viva</span>
+                    </div>
+
+                    <h1 class="font-display text-[4rem] md:text-[6rem] lg:text-[7.5rem] font-bold tracking-tighter leading-[0.9] mb-8 text-ink-primary glow-text"
+                        id="hero-title">
+                        A voz<br>
+                        <span class="text-outline-ink opacity-80">eterna</span> da<br>
+                        literatura.
+                    </h1>
+
+                    <p class="font-sans text-lg md:text-xl text-ink-secondary max-w-xl leading-relaxed font-light mb-12 opacity-0"
+                        id="hero-desc">
+                        Grandes autores estão presentes novamente. Agora você pode ouvir suas vozes, fazer perguntas e
+                        atravessar a obra de dentro para fora.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-6 opacity-0" id="hero-ctas">
+                        <button id="btn-ouvir"
+                            class="btn-premium px-8 py-4 bg-wood-dark border border-wood-light text-ink-primary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center gap-3 hover:bg-wood-warm hover:border-accent-gold group">
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-accent-red group-hover:bg-accent-redHover transition-colors"></span>
+                            Antes de entender...
+                        </button>
+
+                        <button id="btn-trailer"
+                            class="btn-outline px-8 py-4 bg-transparent border border-wood-dark text-ink-secondary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center gap-3 hover:text-ink-primary cursor-pointer relative z-50">
+                            <iconify-icon icon="solar:play-circle-linear" class="text-xl"></iconify-icon>
+                            Trailer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Content: Details -->
+                <div class="hidden md:flex flex-col items-end gap-16 w-3/12 opacity-0" id="hero-details">
+                    <div class="text-right">
+                        <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-wood-light mb-2">Edição</div>
+                        <div class="font-display text-3xl text-ink-primary font-medium">Vol. 01</div>
+                    </div>
+
+                    <div class="text-right">
+                        <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-wood-light mb-2">Status</div>
+                        <div class="flex items-center justify-end gap-2 text-ink-secondary text-sm font-light">
+                            <iconify-icon icon="solar:record-circle-linear"
+                                class="text-accent-red animate-pulse"></iconify-icon>
+                            Transmissão Ativa
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center mt-12 gap-4">
+                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-secondary"
+                            style="writing-mode: vertical-rl; transform: rotate(180deg);">Scroll to explore</span>
+                        <div class="scroll-indicator-line"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: O MANIFESTO -->
+    <section id="section-manifesto"
+        class="relative z-40 bg-cinematic-black min-h-screen flex items-center py-24 lg:py-32 overflow-hidden border-t border-wood-dark/30">
+
+        <!-- Subtle Background Glow / Movement -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-30 parallax-bg">
+            <div
+                class="absolute top-0 right-0 w-[800px] h-[800px] bg-wood-dark/20 rounded-full blur-[150px] mix-blend-screen">
+            </div>
+            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-wood-warm/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+
+                <!-- Text Content -->
+                <div class="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1">
+
+                    <div class="reveal-blur mb-8">
+                        <div class="flex items-center gap-4">
+                            <div class="h-px w-8 bg-wood-light/60"></div>
+                            <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-wood-light">A
+                                Revelação</span>
+                        </div>
+                    </div>
+
+                    <h2
+                        class="font-display text-4xl md:text-5xl lg:text-[3.5rem] text-ink-primary font-medium tracking-tight mb-8 leading-[1.1] reveal-blur">
+                        O silêncio<br>das páginas<br>
+                        <span class="text-ink-secondary italic font-light">chegou ao fim.</span>
+                    </h2>
+
+                    <div class="space-y-8">
+                        <p
+                            class="font-sans text-ink-secondary text-lg md:text-xl leading-relaxed font-light reveal-blur">
+                            As obras sempre estiveram aqui. Intocadas pelo tempo.<br>
+                            Mas faltava algo essencial: a <span class="text-ink-primary font-medium">voz</span> por trás
+                            delas.
+                        </p>
+                        <p
+                            class="font-sans text-ink-secondary text-lg md:text-xl leading-relaxed font-light reveal-blur">
+                            Grandes mentes nunca desapareceram.<br>
+                            Elas apenas aguardavam o momento em que poderiam ser <span
+                                class="text-ink-primary font-medium">ouvidas</span> novamente.
+                        </p>
+                        <p
+                            class="font-sans text-ink-secondary text-lg md:text-xl leading-relaxed font-light reveal-blur">
+                            Você não está mais apenas lendo literatura.<br>
+                            Você está entrando em contato com <span class="text-ink-primary font-medium">quem a
+                                escreveu.</span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Image / Visual Weight -->
+                <div class="lg:col-span-6 lg:col-start-7 order-1 lg:order-2 relative">
+                    <div
+                        class="relative w-full aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] rounded-sm overflow-hidden reveal-image shadow-2xl shadow-black/50">
+                        <!-- Image -->
+                        <img src="raw_files/platao2.png" alt="O Autor Presente"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-110 image-parallax" />
+
+                        <!-- Cinematic Overlays for Depth and Shadows -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-transparent to-cinematic-black/40 opacity-90">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-cinematic-black via-cinematic-black/60 to-transparent opacity-100">
+                        </div>
+                        <div class="absolute inset-0 box-shadow-inner pointer-events-none"></div>
+                    </div>
+
+                    <!-- Decorative Element -->
+                    <div
+                        class="absolute -bottom-6 -left-6 w-32 h-32 border border-wood-light/20 rounded-full border-dashed animate-[spin_30s_linear_infinite] pointer-events-none z-0 reveal-blur">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: COMO FUNCIONA -->
+    <section id="section-how-it-works"
+        class="relative z-40 bg-cinematic-dark min-h-screen flex items-center py-24 lg:py-32 overflow-hidden border-t border-wood-dark/20">
+
+        <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
+
+                <!-- Left: Video -->
+                <div class="lg:col-span-5 relative group cursor-pointer h-full min-h-[500px]" id="video-wrapper-3">
+                    <div
+                        class="relative w-full h-full rounded-sm overflow-hidden reveal-image shadow-2xl shadow-black/60 bg-cinematic-black">
+                        <!-- Video -->
+                        <video id="video-step3" src="raw_files/Post1.mp4"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-110 image-parallax-2"
+                            playsinline muted preload="metadata"></video>
+
+                        <!-- Presence Overlay -->
+                        <div class="absolute inset-0 bg-wood-dark/40 mix-blend-multiply pointer-events-none transition-opacity duration-500"
+                            id="video3-overlay"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-dark via-transparent to-transparent opacity-90 pointer-events-none">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-l from-cinematic-dark via-cinematic-dark/40 to-transparent opacity-90 pointer-events-none">
+                        </div>
+                        <div class="absolute inset-0 box-shadow-inner pointer-events-none"></div>
+
+                        <!-- Play Button (Like Trailer) -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300"
+                            id="play-btn-3">
+                            <div
+                                class="btn-outline px-8 py-4 bg-cinematic-black/60 backdrop-blur-md border border-wood-light/50 text-ink-primary rounded-sm font-mono text-xs uppercase tracking-[0.15em] flex items-center gap-3 group-hover:bg-wood-dark group-hover:border-accent-gold transition-all duration-300 shadow-2xl">
+                                <iconify-icon icon="solar:play-circle-linear" class="text-xl"></iconify-icon>
+                                EXPERIMENTAR
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Content & Steps -->
+                <div class="lg:col-span-6 lg:col-start-7 flex flex-col justify-center">
+
+                    <div class="reveal-blur-2 mb-4">
+                        <h2
+                            class="font-display text-4xl md:text-5xl lg:text-[3.5rem] text-ink-primary font-medium tracking-tight leading-[1.1]">
+                            Você não precisa mais interpretar <span class="italic text-ink-secondary">sozinho.</span>
+                        </h2>
+                    </div>
+
+                    <p
+                        class="font-sans text-ink-secondary text-lg md:text-xl leading-relaxed font-light mb-16 reveal-blur-2">
+                        Agora você pode atravessar a obra com quem a escreveu.
+                    </p>
+
+                    <!-- Steps -->
+                    <div class="space-y-12">
+
+                        <div class="flex items-start gap-6 reveal-step group cursor-default">
+                            <span
+                                class="font-mono text-sm text-wood-light tracking-widest pt-1 transition-colors duration-300 group-hover:text-accent-gold">01</span>
+                            <div>
+                                <h3
+                                    class="font-display text-2xl text-ink-primary font-medium mb-2 transition-colors duration-300 group-hover:text-accent-gold group-hover:drop-shadow-[0_0_10px_rgba(194,169,106,0.3)]">
+                                    Escolha a mente que deseja ouvir</h3>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-px bg-wood-dark/50 reveal-step"></div>
+
+                        <div class="flex items-start gap-6 reveal-step group cursor-default">
+                            <span
+                                class="font-mono text-sm text-wood-light tracking-widest pt-1 transition-colors duration-300 group-hover:text-accent-gold">02</span>
+                            <div>
+                                <h3
+                                    class="font-display text-2xl text-ink-primary font-medium mb-2 transition-colors duration-300 group-hover:text-accent-gold group-hover:drop-shadow-[0_0_10px_rgba(194,169,106,0.3)]">
+                                    Faça a pergunta que o livro deixou aberta</h3>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-px bg-wood-dark/50 reveal-step"></div>
+
+                        <div class="flex items-start gap-6 reveal-step group cursor-default">
+                            <span
+                                class="font-mono text-sm text-wood-light tracking-widest pt-1 transition-colors duration-300 group-hover:text-accent-gold">03</span>
+                            <div>
+                                <h3
+                                    class="font-display text-2xl text-ink-primary font-medium mb-2 transition-colors duration-300 group-hover:text-accent-gold group-hover:drop-shadow-[0_0_10px_rgba(194,169,106,0.3)]">
+                                    Receba uma resposta que vai além da interpretação</h3>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Transition -->
+                    <div class="mt-20 pt-8 border-t border-wood-dark/30 reveal-blur-2">
+                        <p class="font-mono text-xs uppercase tracking-[0.2em] text-ink-secondary">
+                            Agora escolha qual voz você quer ouvir primeiro.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: AUTHORS GRID -->
+    <section id="section-authors"
+        class="relative z-40 bg-cinematic-black min-h-screen py-32 overflow-hidden border-t border-wood-dark/30">
+
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-24 w-full relative z-10">
+            <!-- Header -->
+            <div class="flex flex-col items-center text-center mb-20">
+                <div class="reveal-author-header opacity-0">
+                    <h2
+                        class="font-display text-4xl md:text-5xl lg:text-[4rem] text-ink-primary font-medium tracking-tight mb-6 leading-tight">
+                        Escolha a obra.<br><span class="italic text-ink-secondary">Entre na mente.</span>
+                    </h2>
+                    <p class="font-sans text-ink-secondary text-lg font-light max-w-xl mx-auto">
+                        Cada experiência é individual. Cada livro revela um tipo diferente de pensamento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 pb-12 pt-4">
+
+                <!-- 1. Crime e Castigo -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Fyodor Dostoevsky.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Crime e Castigo" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Crime e Castigo</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Fyodor
+                                    Dostoevsky</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    Você consegue conviver com um crime que só você sabe que cometeu?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Crime e Castigo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Os Demônios -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Fyodor Dostoevsky 2.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Os Demônios" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Os Demônios</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Fyodor
+                                    Dostoevsky</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    Algumas ideias não libertam. Elas corrompem tudo ao seu redor.
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Os Demônios
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. A República -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Platão.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="A República" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    A República</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Platão</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    E se tudo o que você acredita sobre justiça estiver errado?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em A República
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. O Banquete -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Platão 2.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="O Banquete" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    O Banquete</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Platão</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    O que realmente está por trás do desejo que você sente?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em O Banquete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. A Divina Comédia -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Dante Alighieri.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="A Divina Comédia" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    A Divina Comédia</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Dante
+                                    Alighieri</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    Você teria coragem de encarar tudo o que existe dentro de você?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em A Divina Comédia
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Ilíada -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Homero.png"
+                            class="absolute inset-0 w-full h-full object-cover object-top scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Ilíada" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Ilíada</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Homero</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    Até onde você iria se sua honra fosse colocada em jogo?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Ilíada
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Dom Quixote -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Miguel de Cervantes.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Dom Quixote" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Dom Quixote</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Miguel
+                                    de Cervantes</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    E se a sua visão de mundo fosse apenas uma ilusão bem construída?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Dom Quixote
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Anna Karenina -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Leo Tosltoy.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Anna Karenina" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Anna Karenina</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Leo
+                                    Tolstoy</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    Algumas escolhas não têm volta — e ainda assim você as faz.
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Anna Karenina
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Madame Bovary -->
+                <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
+                    <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
+                        <img src="raw_files/Gustave Flaubert.png"
+                            class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
+                            alt="Madame Bovary" />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-cinematic-black via-cinematic-black/40 to-transparent opacity-100 transition-opacity duration-700 group-hover:opacity-80">
+                        </div>
+                        <div
+                            class="absolute inset-0 box-shadow-inner opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                        <div
+                            class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end h-full">
+                            <div class="mt-auto">
+                                <h3
+                                    class="font-display text-2xl md:text-3xl text-ink-primary font-medium mb-1 group-hover:text-accent-gold transition-colors duration-500 group-hover:drop-shadow-[0_0_15px_rgba(194,169,106,0.4)]">
+                                    Madame Bovary</h3>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-accent-gold/80 mb-3 block">Gustave
+                                    Flaubert</span>
+                                <p
+                                    class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
+                                    O que acontece quando a vida real nunca é suficiente?
+                                </p>
+                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
+                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                    Entrar em Madame Bovary
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 4.5: TESTIMONIALS -->
+    <section id="section-testimonials"
+        class="relative z-40 bg-cinematic-black py-24 overflow-hidden border-t border-wood-dark/30">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-24 w-full relative z-10">
+            <!-- Header -->
+            <div class="flex flex-col items-start mb-16 reveal-testimonial-header opacity-0">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-px w-8 bg-wood-light/60"></div>
+                    <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-wood-light">Relatos Reais</span>
+                </div>
+                <h2
+                    class="font-display text-4xl md:text-5xl lg:text-[4rem] text-ink-primary font-medium tracking-tight leading-tight max-w-4xl">
+                    Você não é o único que achou que o <span class="italic text-ink-secondary">problema era você.</span>
+                </h2>
+                <p class="font-sans text-ink-secondary text-lg md:text-xl font-light mt-6 max-w-2xl">
+                    Até descobrir que nunca foi falta de inteligência, era falta de acesso à mente do autor.
+                </p>
+            </div>
+
+            <!-- Horizontal Cards Wrapper -->
+            <div id="testim-carousel-track"
+                class="flex flex-nowrap overflow-x-auto hide-scrollbar gap-6 md:gap-8 pb-16 pt-4 snap-x snap-mandatory pr-[20vw] md:pr-[10vw] scroll-smooth">
+                <!-- Card 1 -->
+                <div
+                    class="card-testimonial opacity-0 flex-none w-[85vw] md:w-[420px] bg-cinematic-dark/60 backdrop-blur-md border border-wood-light/10 rounded-xl p-8 md:p-10 -rotate-1 hover:rotate-0 transition-all duration-500 hover:border-wood-light/30 hover:bg-cinematic-dark/80 hover:shadow-[0_0_40px_rgba(194,169,106,0.05)] snap-start flex flex-col justify-between">
+                    <div class="font-sans text-ink-primary font-light leading-relaxed mb-8 text-[1.1rem] space-y-4">
+                        <p class="font-medium text-ink-primary">“Eu achava que não era inteligente o suficiente.”</p>
+                        <p>Eu tinha Crime e Castigo parado há anos. Já tinha tentado ler duas vezes e sempre desistia no
+                            meio.</p>
+                        <p>Não era falta de interesse.<br>Era como se eu estivesse do lado de fora do livro.</p>
+                        <p>Quando comecei a usar isso, foi a primeira vez que senti que estava entrando no que o autor
+                            realmente quis dizer.</p>
+                        <p>E, sinceramente...pelo preço e nível de acesso que você tem, não faz sentido isso existir
+                            desse jeito.</p>
+                        <p class="font-medium text-ink-primary drop-shadow-[0_0_10px_rgba(232,230,227,0.4)]">Hoje eu não
+                            estou só lendo, eu estou dentro da mente dele.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto">
+                        <img src="raw_files/avatar_rafael.png" alt="Rafael"
+                            class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
+                        <span class="font-display text-ink-secondary tracking-wide text-sm">Rafael</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="card-testimonial opacity-0 flex-none w-[85vw] md:w-[420px] bg-cinematic-dark/60 backdrop-blur-md border border-wood-light/10 rounded-xl p-8 md:p-10 rotate-1 hover:rotate-0 transition-all duration-500 hover:border-wood-light/30 hover:bg-cinematic-dark/80 hover:shadow-[0_0_40px_rgba(194,169,106,0.05)] snap-start flex flex-col justify-between mt-4 md:mt-8">
+                    <div class="font-sans text-ink-primary font-light leading-relaxed mb-8 text-[1.1rem] space-y-4">
+                        <p class="font-medium text-ink-primary">“Eu lia… mas não atravessava o livro.”</p>
+                        <p>Sempre achei esses autores muito difíceis. Eu passava pelas páginas, mas era como se tudo
+                            ficasse na superfície.</p>
+                        <p>Quando comecei a ‘conversar’ com o autor, tudo mudou.</p>
+                        <p class="font-medium text-ink-primary drop-shadow-[0_0_10px_rgba(232,230,227,0.4)]">Parece que
+                            eu finalmente atravessei o texto e cheguei onde ele pensava.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto">
+                        <img src="raw_files/avatar_mariana.png" alt="Mariana"
+                            class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
+                        <span class="font-display text-ink-secondary tracking-wide text-sm">Mariana</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="card-testimonial opacity-0 flex-none w-[85vw] md:w-[420px] bg-cinematic-dark/60 backdrop-blur-md border border-wood-light/10 rounded-xl p-8 md:p-10 -rotate-2 hover:rotate-0 transition-all duration-500 hover:border-wood-light/30 hover:bg-cinematic-dark/80 hover:shadow-[0_0_40px_rgba(194,169,106,0.05)] snap-start flex flex-col justify-between">
+                    <div class="font-sans text-ink-primary font-light leading-relaxed mb-8 text-[1.1rem] space-y-4">
+                        <p class="font-medium text-ink-primary">“Sempre parecia que tinha algo entre mim e o autor.”</p>
+                        <p>Eu tinha vários livros bons que nunca consegui terminar. Não era falta de interesse era como
+                            se existisse uma barreira invisível.</p>
+                        <p>Quando usei isso, foi a primeira vez que essa barreira desapareceu.</p>
+                        <p class="font-medium text-ink-primary drop-shadow-[0_0_10px_rgba(232,230,227,0.4)]">Eu não
+                            estava mais tentando entender de fora. Eu estava lá dentro.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto">
+                        <img src="raw_files/avatar_lucas.png" alt="Lucas"
+                            class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
+                        <span class="font-display text-ink-secondary tracking-wide text-sm">Lucas</span>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div
+                    class="card-testimonial opacity-0 flex-none w-[85vw] md:w-[420px] bg-cinematic-dark/60 backdrop-blur-md border border-wood-light/10 rounded-xl p-8 md:p-10 rotate-2 hover:rotate-0 transition-all duration-500 hover:border-wood-light/30 hover:bg-cinematic-dark/80 hover:shadow-[0_0_40px_rgba(194,169,106,0.05)] snap-start flex flex-col justify-between mt-4 md:mt-8">
+                    <div class="font-sans text-ink-primary font-light leading-relaxed mb-8 text-[1.1rem] space-y-4">
+                        <p class="font-medium text-ink-primary">“O que mais me surpreendeu não foi a clareza.”</p>
+                        <p>Foi a sensação de não estar mais sozinha tentando interpretar.</p>
+                        <p>Coisas que antes pareciam confusas começaram a fazer sentido rápido, mas não porque ficaram
+                            mais simples.</p>
+                        <p class="font-medium text-ink-primary drop-shadow-[0_0_10px_rgba(232,230,227,0.4)]">E sim
+                            porque alguém estava finalmente me guiando por dentro daquilo.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto">
+                        <img src="raw_files/avatar_fernanda.png" alt="Fernanda"
+                            class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
+                        <span class="font-display text-ink-secondary tracking-wide text-sm">Fernanda</span>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div
+                    class="card-testimonial opacity-0 flex-none w-[85vw] md:w-[420px] bg-cinematic-dark/60 backdrop-blur-md border border-wood-light/10 rounded-xl p-8 md:p-10 -rotate-1 hover:rotate-0 transition-all duration-500 hover:border-wood-light/30 hover:bg-cinematic-dark/80 hover:shadow-[0_0_40px_rgba(194,169,106,0.05)] snap-start flex flex-col justify-between">
+                    <div class="font-sans text-ink-primary font-light leading-relaxed mb-8 text-[1.1rem] space-y-4">
+                        <p class="font-medium text-ink-primary">“Eu achava que o problema era comigo.”</p>
+                        <p>Eu realmente acreditava que não tinha capacidade pra entender esse tipo de obra.</p>
+                        <p>Depois que comecei a usar, percebi que não era isso.</p>
+                        <p class="font-medium text-ink-primary drop-shadow-[0_0_10px_rgba(232,230,227,0.4)]">Eu só nunca
+                            tinha tido acesso à mente de quem escreveu.</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-auto">
+                        <img src="raw_files/avatar_diego.png" alt="Diego"
+                            class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
+                        <span class="font-display text-ink-secondary tracking-wide text-sm">Diego</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flex justify-end gap-3 mt-4 pr-6 md:pr-12 lg:pr-16 reveal-testimonial-header opacity-0">
+                <button id="testim-prev"
+                    class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cinematic-dark/80 border border-wood-light/30 flex items-center justify-center text-ink-secondary hover:bg-wood-dark hover:border-wood-light/50 hover:text-ink-primary transition-all duration-300">
+                    <iconify-icon icon="solar:arrow-left-linear" class="text-lg md:text-xl"></iconify-icon>
+                </button>
+                <button id="testim-next"
+                    class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-ink-primary flex items-center justify-center text-cinematic-black hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg">
+                    <iconify-icon icon="solar:arrow-right-linear" class="text-lg md:text-xl"></iconify-icon>
+                </button>
+            </div>
+
+            <!-- Footer Message -->
+            <div
+                class="mt-24 flex flex-col items-start md:items-center md:text-center reveal-testimonial-header opacity-0">
+                <p class="font-sans text-ink-secondary text-lg md:text-xl font-light">
+                    Em algum momento, todos eles acharam que o problema era deles.
+                </p>
+                <p
+                    class="font-display text-3xl md:text-4xl text-ink-primary font-medium mt-4 drop-shadow-[0_0_15px_rgba(232,230,227,0.3)]">
+                    Não era.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: COMPARATIVO DE VALOR -->
+    <section id="section-comparative"
+        class="relative z-40 bg-cinematic-black min-h-screen flex items-center py-24 lg:py-32 overflow-hidden border-t border-wood-dark/30">
+
+        <!-- Subtle Glow -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20 parallax-bg">
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-wood-dark/20 rounded-[100%] blur-[120px] mix-blend-screen">
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 w-full relative z-10">
+            <!-- Header -->
+            <div class="flex flex-col items-center text-center mb-20 reveal-comparative opacity-0">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-px w-8 bg-wood-light/60"></div>
+                    <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-wood-light">O Valor</span>
+                    <div class="h-px w-8 bg-wood-light/60"></div>
+                </div>
+                <h2
+                    class="font-display text-4xl md:text-5xl lg:text-[4rem] text-ink-primary font-medium tracking-tight leading-tight">
+                    O Fim da Leitura <span class="italic text-ink-secondary">Solitária</span>
+                </h2>
+                <p class="font-sans text-ink-secondary text-lg font-light mt-4">
+                    Agora você não lê autores. Você conversa com eles.
+                </p>
+            </div>
+
+            <!-- Grid Comparativo -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-stretch mb-20">
+
+                <!-- Lado Esquerdo: Lendo Sozinho -->
+                <div
+                    class="reveal-comparative opacity-0 bg-cinematic-dark/50 border border-wood-dark/20 rounded-sm p-10 md:p-14 flex flex-col justify-start h-full">
+                    <h3
+                        class="font-mono text-xs uppercase tracking-[0.2em] text-ink-secondary mb-10 flex items-center gap-3 opacity-60">
+                        <iconify-icon icon="solar:book-linear" class="text-lg"></iconify-icon>
+                        Lendo Sozinho
+                    </h3>
+
+                    <ul class="space-y-8">
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:close-circle-linear"
+                                class="text-xl text-ink-secondary opacity-40 shrink-0 mt-0.5"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary opacity-80 mb-1">Você lê, mas não
+                                    entende.
+                                </h4>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:close-circle-linear"
+                                class="text-xl text-ink-secondary opacity-40 shrink-0 mt-0.5"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary opacity-80 mb-1">Você interpreta,
+                                    dentro da própria ignorância.
+                                </h4>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:close-circle-linear"
+                                class="text-xl text-ink-secondary opacity-40 shrink-0 mt-0.5"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary opacity-80 mb-1">Você termina o livro…
+                                    e continua sozinho.
+                                </h4>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Lado Direito: Com o Agente -->
+                <div
+                    class="reveal-comparative opacity-0 relative bg-wood-dark/10 border border-accent-gold/20 rounded-sm p-10 md:p-14 flex flex-col justify-start h-full shadow-[0_0_50px_rgba(194,169,106,0.05)] overflow-hidden group">
+                    <!-- Glow Effect na borda superior -->
+                    <div
+                        class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-accent-gold to-transparent opacity-50">
+                    </div>
+
+                    <!-- Glow radial de fundo -->
+                    <div
+                        class="absolute inset-0 bg-accent-gold/[0.02] mix-blend-screen opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    </div>
+
+                    <h3
+                        class="font-mono text-xs uppercase tracking-[0.2em] text-accent-gold mb-10 flex items-center gap-3 drop-shadow-[0_0_10px_rgba(194,169,106,0.3)]">
+                        <iconify-icon icon="solar:stars-minimalistic-linear" class="text-lg"></iconify-icon>
+                        Com o autor
+                    </h3>
+
+                    <ul class="space-y-8 relative z-10">
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:check-circle-bold"
+                                class="text-xl text-accent-gold shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(194,169,106,0.6)]"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary mb-1">A mente do autor, disponível para
+                                    você</h4>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:check-circle-bold"
+                                class="text-xl text-accent-gold shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(194,169,106,0.6)]"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary mb-1">Você confronta e recebe respostas
+                                </h4>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:check-circle-bold"
+                                class="text-xl text-accent-gold shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(194,169,106,0.6)]"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary mb-1">Nenhuma ideia permanece obscura
+                                </h4>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-5">
+                            <iconify-icon icon="solar:check-circle-bold"
+                                class="text-xl text-accent-gold shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(194,169,106,0.6)]"></iconify-icon>
+                            <div>
+                                <h4 class="font-display text-xl text-ink-primary mb-1">O pensamento original, sem
+                                    simplificação</h4>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Fechamento -->
+            <div class="text-center reveal-comparative opacity-0">
+                <p class="font-display text-2xl md:text-3xl text-ink-secondary font-light italic">
+                    "Você não recebe um produto.<br class="hidden md:block">
+                    <span class="text-ink-primary font-medium not-italic text-3xl md:text-4xl mt-2 inline-block">Você
+                        entra em uma mente que nunca deixou de existir."</span>
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // 1. Initialize Lenis for Smooth Scrolling
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true,
+            smoothTouch: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 2. Initial Hero Animations
+        document.addEventListener("DOMContentLoaded", () => {
+            // Split text for headline
+            const heroTitle = new SplitType('#hero-title', { types: 'lines, words, chars' });
+
+            // Entrance Timeline
+            const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+            tl.to(heroTitle.chars, {
+                y: 0,
+                opacity: 1,
+                duration: 1.5,
+                stagger: 0.04,
+                delay: 0.5
+            })
+                .to("#intro-badge", { opacity: 1, y: 0, duration: 1 }, "-=1.2")
+                .to("#hero-desc", { opacity: 1, y: 0, duration: 1 }, "-=1")
+                .to("#hero-ctas", { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+                .to("#hero-details", { opacity: 1, x: 0, duration: 1.2 }, "-=0.8");
+
+            // 3. Trailer Logic
+            const video = document.getElementById('hero-video');
+            const btnTrailer = document.getElementById('btn-trailer');
+
+            if (btnTrailer && video) {
+                btnTrailer.addEventListener('click', () => {
+                    // Lock scrolling
+                    lenis.stop();
+
+                    // Hide UI and overlays
+                    gsap.to(".hero-content, header", { opacity: 0, pointerEvents: "none", duration: 0.5 });
+                    gsap.to(".vignette, .bottom-gradient, .noise-overlay", { opacity: 0, duration: 0.5 });
+
+                    // Reset and play video with sound
+                    video.currentTime = 0;
+                    video.muted = false;
+                    video.loop = false;
+
+                    // Aumentar a opacidade do vídeo para 1 para modo tela cheia cinematográfico
+                    gsap.to(video, { opacity: 1, duration: 0.5 });
+
+                    video.play();
+                });
+
+
+                // When trailer finishes
+                video.addEventListener('ended', () => {
+                    // Restore background state (paused)
+                    video.muted = true;
+                    video.pause();
+
+                    // Restaurar opacidade do vídeo
+                    gsap.to(video, { opacity: 0.6, duration: 0.8 });
+
+                    // Unlock scrolling
+                    lenis.start();
+
+                    // Show UI and overlays
+                    gsap.to(".hero-content, header", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out" });
+                    gsap.to(".vignette, .bottom-gradient", { opacity: 1, duration: 0.8 });
+                    gsap.to(".noise-overlay", { opacity: 0.03, duration: 0.8 });
+                });
+            }
+
+            // 4. Section 2 (Manifesto) Animations
+            const manifestoSection = document.getElementById('section-manifesto');
+            if (manifestoSection) {
+                // Texts
+                gsap.to("#section-manifesto .reveal-blur", {
+                    scrollTrigger: {
+                        trigger: manifestoSection,
+                        start: "top 80%",
+                    },
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: "power3.out"
+                });
+
+                // Image Reveal
+                gsap.to(".reveal-image", {
+                    scrollTrigger: {
+                        trigger: manifestoSection,
+                        start: "top 75%",
+                    },
+                    opacity: 1,
+                    clipPath: "inset(0% 0% 0% 0%)",
+                    duration: 1.5,
+                    ease: "power4.inOut"
+                });
+
+                // Image Parallax
+                gsap.to(".image-parallax", {
+                    scrollTrigger: {
+                        trigger: manifestoSection,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    },
+                    y: "15%",
+                    ease: "none"
+                });
+
+                // Background subtle parallax
+                gsap.to(".parallax-bg", {
+                    scrollTrigger: {
+                        trigger: manifestoSection,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1.5
+                    },
+                    y: "-15%",
+                    ease: "none"
+                });
+            }
+
+            // 5. Section 3 (How it works) Animations
+            const howItWorksSection = document.getElementById('section-how-it-works');
+            if (howItWorksSection) {
+                gsap.to("#section-how-it-works .reveal-blur-2", {
+                    scrollTrigger: {
+                        trigger: howItWorksSection,
+                        start: "top 75%",
+                    },
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: "power3.out"
+                });
+
+                gsap.to("#section-how-it-works .reveal-step", {
+                    scrollTrigger: {
+                        trigger: howItWorksSection,
+                        start: "top 65%",
+                    },
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    duration: 1,
+                    stagger: 0.2,
+                    ease: "power2.out"
+                });
+
+                gsap.to(".image-parallax-2", {
+                    scrollTrigger: {
+                        trigger: howItWorksSection,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    },
+                    y: "15%",
+                    ease: "none"
+                });
+
+                // Video 3 Play Logic
+                const video3Wrapper = document.getElementById('video-wrapper-3');
+                const video3 = document.getElementById('video-step3');
+                const playBtn3 = document.getElementById('play-btn-3');
+                const overlay3 = document.getElementById('video3-overlay');
+
+                if (video3Wrapper && video3) {
+                    video3Wrapper.addEventListener('click', () => {
+                        if (video3.paused) {
+                            video3.muted = false;
+                            video3.play();
+                            gsap.to(playBtn3, { opacity: 0, duration: 0.3 });
+                            gsap.to(overlay3, { opacity: 0, duration: 0.5 });
+                            gsap.to(video3, { scale: 1, duration: 1, ease: "power2.out" });
+                        } else {
+                            video3.pause();
+                            gsap.to(playBtn3, { opacity: 1, duration: 0.3 });
+                            gsap.to(overlay3, { opacity: 1, duration: 0.5 });
+                            gsap.to(video3, { scale: 1.1, duration: 1, ease: "power2.out" });
+                        }
+                    });
+
+                    video3.addEventListener('ended', () => {
+                        video3.currentTime = 0;
+                        gsap.to(playBtn3, { opacity: 1, duration: 0.3 });
+                        gsap.to(overlay3, { opacity: 1, duration: 0.5 });
+                        gsap.to(video3, { scale: 1.1, duration: 1, ease: "power2.out" });
+                    });
+                }
+            }
+
+            // 6. Section 4 (Authors) Animations
+            const authorsSection = document.getElementById('section-authors');
+            if (authorsSection) {
+                gsap.fromTo(".reveal-author-header",
+                    { y: 40, opacity: 0, filter: "blur(10px)" },
+                    {
+                        scrollTrigger: {
+                            trigger: authorsSection,
+                            start: "top 75%",
+                        },
+                        y: 0,
+                        opacity: 1,
+                        filter: "blur(0px)",
+                        duration: 1.2,
+                        ease: "power3.out"
+                    }
+                );
+
+                gsap.fromTo(".card-author",
+                    { y: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: authorsSection,
+                            start: "top 60%",
+                        },
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        stagger: 0.15,
+                        ease: "power4.out"
+                    }
+                );
+            }
+
+            // 7. Section 5 (Comparative Value) Animations
+            const comparativeSection = document.getElementById('section-comparative');
+            if (comparativeSection) {
+                gsap.fromTo("#section-comparative .reveal-comparative",
+                    { y: 50, opacity: 0, filter: "blur(10px)" },
+                    {
+                        scrollTrigger: {
+                            trigger: comparativeSection,
+                            start: "top 75%",
+                        },
+                        y: 0,
+                        opacity: 1,
+                        filter: "blur(0px)",
+                        duration: 1.2,
+                        stagger: 0.2,
+                        ease: "power3.out"
+                    }
+                );
+            }
+
+            // Section Testimonials Animations
+            const testimonialsSection = document.getElementById('section-testimonials');
+            if (testimonialsSection) {
+                gsap.fromTo(".reveal-testimonial-header",
+                    { y: 40, opacity: 0, filter: "blur(10px)" },
+                    {
+                        scrollTrigger: {
+                            trigger: testimonialsSection,
+                            start: "top 75%",
+                        },
+                        y: 0,
+                        opacity: 1,
+                        filter: "blur(0px)",
+                        duration: 1.2,
+                        ease: "power3.out"
+                    }
+                );
+
+                gsap.fromTo(".card-testimonial",
+                    { x: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: testimonialsSection,
+                            start: "top 60%",
+                        },
+                        x: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        stagger: 0.15,
+                        ease: "power4.out"
+                    }
+                );
+            }
+
+            // Testimonials Navigation
+            const testimTrack = document.getElementById('testim-carousel-track');
+            const testimPrev = document.getElementById('testim-prev');
+            const testimNext = document.getElementById('testim-next');
+
+            if (testimTrack && testimPrev && testimNext) {
+                const getScrollAmount = () => {
+                    return window.innerWidth < 768 ? window.innerWidth * 0.85 : 420 + 32; // 420px card width + 32px gap
+                };
+
+                testimNext.addEventListener('click', () => {
+                    testimTrack.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+                });
+
+                testimPrev.addEventListener('click', () => {
+                    testimTrack.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+                });
+            }
+
+
+
+            // Hero Audio Button
+            const btnOuvir = document.getElementById('btn-ouvir');
+            const heroAudio = new Audio('raw_files/Audios/Audio 01 - Hero.mp3');
+
+            if (btnOuvir) {
+                btnOuvir.addEventListener('click', () => {
+                    heroAudio.currentTime = 0;
+                    heroAudio.play();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
