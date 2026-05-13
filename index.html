@@ -181,15 +181,18 @@
             -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 95%);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .hero-playing-trailer #hero-video-container {
             z-index: 45;
         }
+
         .hero-playing-trailer .hero-video {
             opacity: 1;
             mix-blend-mode: normal;
             mask-image: none;
             -webkit-mask-image: none;
         }
+
         @media (max-width: 768px) {
             .hero-playing-trailer .hero-video {
                 object-fit: cover;
@@ -274,17 +277,21 @@
     </header>
 
     <!-- SECTION 1: HERO -->
-    <section id="hero-section" class="relative w-full min-h-[100svh] overflow-hidden bg-cinematic-black flex items-center justify-center pt-16 pb-12 md:py-0">
+    <section id="hero-section"
+        class="relative w-full min-h-[100svh] overflow-hidden bg-cinematic-black flex items-center justify-center pt-16 pb-12 md:py-0">
 
         <!-- Video Background (Absolute within the section) -->
         <div id="hero-video-container" class="absolute inset-0 z-0 bg-cinematic-black transition-all duration-700">
             <!-- Videos start paused. Play only when Trailer is clicked. -->
-            <video class="hero-video hidden md:block" src="assets/raw_files/Hero Session.mp4" playsinline muted preload="auto"></video>
-            <video class="hero-video block md:hidden" src="assets/raw_files/Hero Session Vertical.mp4" playsinline muted preload="auto"></video>
+            <video class="hero-video hidden md:block" src="./assets/raw_files/Hero Session.mp4" playsinline muted
+                preload="auto"></video>
+            <video class="hero-video block md:hidden" src="./assets/raw_files/Hero Session Vertical.mp4" playsinline
+                muted preload="auto"></video>
         </div>
 
         <!-- Close Trailer Button -->
-        <button id="close-hero-trailer" class="absolute top-6 right-6 md:top-8 md:right-8 text-ink-primary hover:text-accent-gold transition-colors z-[60] cursor-pointer bg-wood-dark/50 p-2 rounded-full border border-wood-light/30 flex items-center justify-center opacity-0 pointer-events-none">
+        <button id="close-hero-trailer"
+            class="absolute top-6 right-6 md:top-8 md:right-8 text-ink-primary hover:text-accent-gold transition-colors z-[60] cursor-pointer bg-wood-dark/50 p-2 rounded-full border border-wood-light/30 flex items-center justify-center opacity-0 pointer-events-none">
             <iconify-icon icon="solar:close-circle-linear" class="text-3xl md:text-4xl"></iconify-icon>
         </button>
 
@@ -319,7 +326,8 @@
                         atravessar a obra de dentro para fora.
                     </p>
 
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full opacity-0" id="hero-ctas">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full opacity-0"
+                        id="hero-ctas">
                         <button id="btn-ouvir"
                             class="btn-premium px-6 py-3.5 md:px-8 md:py-[max(0.75rem,2vh)] bg-wood-dark border border-wood-light text-ink-primary rounded-sm font-mono text-[10px] md:text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-3 hover:bg-wood-warm hover:border-accent-gold group w-full max-w-[280px] sm:max-w-none sm:w-auto">
                             <span
@@ -336,10 +344,12 @@
                 </div>
 
                 <!-- Right Content: Details -->
-                <div class="hidden md:flex flex-col items-end gap-[max(2rem,min(8vh,4rem))] w-3/12 opacity-0 md:mt-[4vh] lg:mt-[6vh] md:mr-16 lg:mr-32" id="hero-details">
+                <div class="hidden md:flex flex-col items-end gap-[max(2rem,min(8vh,4rem))] w-3/12 opacity-0 md:mt-[4vh] lg:mt-[6vh] md:mr-16 lg:mr-32"
+                    id="hero-details">
                     <div class="text-right">
                         <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-wood-light mb-2">Edição</div>
-                        <div class="font-display text-[clamp(1.5rem,3.5vh,1.875rem)] text-ink-primary font-medium">Vol. 01</div>
+                        <div class="font-display text-[clamp(1.5rem,3.5vh,1.875rem)] text-ink-primary font-medium">Vol.
+                            01</div>
                     </div>
 
                     <div class="text-right">
@@ -352,8 +362,10 @@
                     </div>
 
                     <div class="flex flex-col items-center mt-[max(1rem,4vh)] gap-4">
-                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-secondary whitespace-nowrap"
-                            style="writing-mode: vertical-rl; transform: rotate(180deg);">Continue. O autor ainda não terminou de falar.</span>
+                        <span
+                            class="text-[10px] font-mono uppercase tracking-[0.3em] text-ink-secondary whitespace-nowrap"
+                            style="writing-mode: vertical-rl; transform: rotate(180deg);">Continue. O autor ainda não
+                            terminou de falar.</span>
                         <div class="scroll-indicator-line"></div>
                     </div>
                 </div>
@@ -424,7 +436,7 @@
                     <div
                         class="relative w-full aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] rounded-sm overflow-hidden reveal-image shadow-2xl shadow-black/50">
                         <!-- Image -->
-                        <img src="assets/raw_files/platao2.png" alt="O Autor Presente"
+                        <img src="./assets/raw_files/platao2.png" alt="O Autor Presente"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-110 image-parallax" />
 
                         <!-- Cinematic Overlays for Depth and Shadows -->
@@ -459,7 +471,7 @@
                     <div
                         class="relative w-full h-full rounded-sm overflow-hidden reveal-image shadow-2xl shadow-black/60 bg-cinematic-black">
                         <!-- Video -->
-                        <video id="video-step3" src="assets/raw_files/Post1.mp4"
+                        <video id="video-step3" src="./assets/raw_files/Video Fiodor - Pagina Index.mp4" poster="./assets/raw_files/Fiodor Base.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-110 image-parallax-2"
                             playsinline muted preload="metadata"></video>
 
@@ -577,7 +589,7 @@
                 <!-- 1. Crime e Castigo -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Fyodor Dostoevsky.png"
+                        <img src="./assets/raw_files/Fyodor Dostoevsky.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Crime e Castigo" />
                         <div
@@ -601,8 +613,8 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     Você consegue conviver com um crime que só você sabe que cometeu?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                <a href="https://pay.kirvano.com/aa9ca33a-65ef-4a05-9924-572ee311b126" target="_blank"
+                                    class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
                                     <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
                                     Entrar em Crime e Castigo
                                 </a>
@@ -614,7 +626,7 @@
                 <!-- 2. Os Demônios -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Fyodor Dostoevsky 2.png"
+                        <img src="./assets/raw_files/Fyodor Dostoevsky 2.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Os Demônios" />
                         <div
@@ -638,11 +650,16 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     Algumas ideias não libertam. Elas corrompem tudo ao seu redor.
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
-                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
-                                    Entrar em Os Demônios
-                                </a>
+                                <div class="relative w-full">
+                                    <div class="absolute -top-5 w-full flex justify-center">
+                                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-primary">Em breve</span>
+                                    </div>
+                                    <a href="#"
+                                        class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                        <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                        Entrar em Os Demônios
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -651,7 +668,7 @@
                 <!-- 3. A República -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Platão.png"
+                        <img src="./assets/raw_files/Platão.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="A República" />
                         <div
@@ -674,8 +691,8 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     E se tudo o que você acredita sobre justiça estiver errado?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                <a href="https://pay.kirvano.com/8dcebca0-5e1a-4f49-9ed0-5ef2640a048c" target="_blank"
+                                    class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
                                     <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
                                     Entrar em A República
                                 </a>
@@ -687,7 +704,7 @@
                 <!-- 4. O Banquete -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Platão 2.png"
+                        <img src="./assets/raw_files/Platão 2.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="O Banquete" />
                         <div
@@ -710,11 +727,16 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     O que realmente está por trás do desejo que você sente?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
-                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
-                                    Entrar em O Banquete
-                                </a>
+                                <div class="relative w-full">
+                                    <div class="absolute -top-5 w-full flex justify-center">
+                                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-primary">Em breve</span>
+                                    </div>
+                                    <a href="#"
+                                        class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                        <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                        Entrar em O Banquete
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -723,7 +745,7 @@
                 <!-- 5. A Divina Comédia -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Dante Alighieri.png"
+                        <img src="./assets/raw_files/Dante Alighieri.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="A Divina Comédia" />
                         <div
@@ -747,11 +769,16 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     Você teria coragem de encarar tudo o que existe dentro de você?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
-                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
-                                    Entrar em A Divina Comédia
-                                </a>
+                                <div class="relative w-full">
+                                    <div class="absolute -top-5 w-full flex justify-center">
+                                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-primary">Em breve</span>
+                                    </div>
+                                    <a href="#"
+                                        class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                        <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                        Entrar em A Divina Comédia
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -760,7 +787,7 @@
                 <!-- 6. Ilíada -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Homero.png"
+                        <img src="./assets/raw_files/Homero.png"
                             class="absolute inset-0 w-full h-full object-cover object-top scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Ilíada" />
                         <div
@@ -783,8 +810,8 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     Até onde você iria se sua honra fosse colocada em jogo?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                <a href="https://pay.kirvano.com/1f060c4d-df64-4499-a167-1ce11ba73914" target="_blank"
+                                    class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
                                     <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
                                     Entrar em Ilíada
                                 </a>
@@ -796,7 +823,7 @@
                 <!-- 7. Dom Quixote -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Miguel de Cervantes.png"
+                        <img src="./assets/raw_files/Miguel de Cervantes.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Dom Quixote" />
                         <div
@@ -820,8 +847,8 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     E se a sua visão de mundo fosse apenas uma ilusão bem construída?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                <a href="https://pay.kirvano.com/49ea0fe8-7aa4-4094-af61-192b038b215b" target="_blank"
+                                    class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
                                     <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
                                     Entrar em Dom Quixote
                                 </a>
@@ -833,7 +860,7 @@
                 <!-- 8. Anna Karenina -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Leo Tosltoy.png"
+                        <img src="./assets/raw_files/Leo Tosltoy.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Anna Karenina" />
                         <div
@@ -857,8 +884,8 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     Algumas escolhas não têm volta — e ainda assim você as faz.
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                <a href="https://pay.kirvano.com/677484e7-2dc8-453a-8455-ba51c8fc7aeb" target="_blank"
+                                    class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
                                     <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
                                     Entrar em Anna Karenina
                                 </a>
@@ -870,7 +897,7 @@
                 <!-- 9. Madame Bovary -->
                 <div class="card-author opacity-0 group relative w-full aspect-[3/4] cursor-pointer">
                     <div class="absolute inset-0 rounded-sm overflow-hidden bg-cinematic-dark">
-                        <img src="assets/raw_files/Gustave Flaubert.png"
+                        <img src="./assets/raw_files/Gustave Flaubert.png"
                             class="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)] opacity-70 group-hover:opacity-100"
                             alt="Madame Bovary" />
                         <div
@@ -894,11 +921,16 @@
                                     class="font-sans text-sm text-ink-secondary font-light mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500 min-h-[48px] flex items-start">
                                     O que acontece quando a vida real nunca é suficiente?
                                 </p>
-                                <a href="https://pay.kirvano.com/3ca1c7ef-6465-4f64-8345-e20c6d604211" target="_blank"
-                                    class="btn-premium px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
-                                    <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
-                                    Entrar em Madame Bovary
-                                </a>
+                                <div class="relative w-full">
+                                    <div class="absolute -top-5 w-full flex justify-center">
+                                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-primary">Em breve</span>
+                                    </div>
+                                    <a href="#"
+                                        class="btn-premium min-h-[72px] text-center px-6 py-4 w-full bg-wood-dark/60 backdrop-blur-md border border-wood-light/30 text-ink-primary rounded-sm font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 group-hover:bg-accent-gold group-hover:text-cinematic-black group-hover:border-accent-gold transition-all duration-500">
+                                        <iconify-icon icon="solar:chat-round-dots-linear" class="text-lg"></iconify-icon>
+                                        Entrar em Madame Bovary
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -947,7 +979,7 @@
                             estou só lendo, eu estou dentro da mente dele.</p>
                     </div>
                     <div class="flex items-center gap-4 mt-auto">
-                        <img src="assets/raw_files/avatar_rafael.png" alt="Rafael"
+                        <img src="./assets/raw_files/avatar_rafael.png" alt="Rafael"
                             class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
                         <span class="font-display text-ink-secondary tracking-wide text-sm">Rafael</span>
                     </div>
@@ -965,7 +997,7 @@
                             eu finalmente atravessei o texto e cheguei onde ele pensava.</p>
                     </div>
                     <div class="flex items-center gap-4 mt-auto">
-                        <img src="assets/raw_files/avatar_mariana.png" alt="Mariana"
+                        <img src="./assets/raw_files/avatar_mariana.png" alt="Mariana"
                             class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
                         <span class="font-display text-ink-secondary tracking-wide text-sm">Mariana</span>
                     </div>
@@ -983,7 +1015,7 @@
                             estava mais tentando entender de fora. Eu estava lá dentro.</p>
                     </div>
                     <div class="flex items-center gap-4 mt-auto">
-                        <img src="assets/raw_files/avatar_lucas.png" alt="Lucas"
+                        <img src="./assets/raw_files/avatar_lucas.png" alt="Lucas"
                             class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
                         <span class="font-display text-ink-secondary tracking-wide text-sm">Lucas</span>
                     </div>
@@ -1001,7 +1033,7 @@
                             porque alguém estava finalmente me guiando por dentro daquilo.</p>
                     </div>
                     <div class="flex items-center gap-4 mt-auto">
-                        <img src="assets/raw_files/avatar_fernanda.png" alt="Fernanda"
+                        <img src="./assets/raw_files/avatar_fernanda.png" alt="Fernanda"
                             class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
                         <span class="font-display text-ink-secondary tracking-wide text-sm">Fernanda</span>
                     </div>
@@ -1018,7 +1050,7 @@
                             tinha tido acesso à mente de quem escreveu.</p>
                     </div>
                     <div class="flex items-center gap-4 mt-auto">
-                        <img src="assets/raw_files/avatar_diego.png" alt="Diego"
+                        <img src="./assets/raw_files/avatar_diego.png" alt="Diego"
                             class="w-10 h-10 rounded-full object-cover grayscale opacity-90 border border-wood-light/20">
                         <span class="font-display text-ink-secondary tracking-wide text-sm">Diego</span>
                     </div>
@@ -1237,18 +1269,18 @@
             if (btnTrailer && heroVideos.length > 0 && heroSection && closeHeroTrailer) {
                 const openTrailer = () => {
                     lenis.stop();
-                    
+
                     // Change video state
                     heroSection.classList.add('hero-playing-trailer');
-                    
+
                     // Fade out UI
                     gsap.to(".hero-content, header", { opacity: 0, pointerEvents: "none", duration: 0.5 });
                     gsap.to(".vignette, .bottom-gradient, .noise-overlay", { opacity: 0, duration: 0.5 });
-                    
+
                     // Fade in close button
                     closeHeroTrailer.classList.remove('pointer-events-none');
                     gsap.to(closeHeroTrailer, { opacity: 1, duration: 0.5, delay: 0.3 });
-                    
+
                     heroVideos.forEach(heroVideo => {
                         heroVideo.currentTime = 0;
                         heroVideo.muted = false;
@@ -1263,19 +1295,19 @@
 
                 const closeTrailer = () => {
                     lenis.start();
-                    
+
                     // Restore video state
                     heroSection.classList.remove('hero-playing-trailer');
-                    
+
                     // Fade out close button
                     closeHeroTrailer.classList.add('pointer-events-none');
                     gsap.to(closeHeroTrailer, { opacity: 0, duration: 0.3 });
-                    
+
                     // Fade in UI
                     gsap.to(".hero-content, header", { opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power2.out", delay: 0.2 });
                     gsap.to(".vignette, .bottom-gradient", { opacity: 1, duration: 0.8, delay: 0.2 });
                     gsap.to(".noise-overlay", { opacity: 0.03, duration: 0.8, delay: 0.2 });
-                    
+
                     heroVideos.forEach(heroVideo => {
                         heroVideo.pause();
                         heroVideo.muted = true;
@@ -1524,7 +1556,7 @@
 
             // Hero Audio Button
             const btnOuvir = document.getElementById('btn-ouvir');
-            const heroAudio = new Audio('assets/raw_files/Audios/Audio 01 - Hero.mp3');
+            const heroAudio = new Audio('./assets/raw_files/Audios/Audio 01 - Hero.mp3');
 
             if (btnOuvir) {
                 btnOuvir.addEventListener('click', () => {
